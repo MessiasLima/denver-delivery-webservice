@@ -23,6 +23,11 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         try {
+
+            if (request.getMethod().equals("OPTIONS")){
+                return true;
+            }
+
             String authorization = request.getHeader("Authorization");
             Usuario usuario = usuarioService.findByAuthorization(authorization);
             request.setAttribute(SecurityConfiguration.AUTHETICATED_USER, usuario);

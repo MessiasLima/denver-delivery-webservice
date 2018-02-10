@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Table(name = "usuario")
 public class Usuario {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
     @Setter
     private Integer id;
@@ -18,6 +19,11 @@ public class Usuario {
     @Getter
     @Setter
     private String nome;
+
+    @Getter
+    @Setter
+    @Column(unique = true)
+    private String login;
 
     @Getter
     @Setter

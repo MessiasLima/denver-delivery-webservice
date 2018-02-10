@@ -4,7 +4,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.List;
 
 @Repository
 public class GenericRepository<T> {
@@ -16,7 +15,7 @@ public class GenericRepository<T> {
     }
 
 
-    public T salvarOuAtualizar(T entity){
+    public T saveOrUpdate(T entity){
         return entityManager.merge(entity);
     }
 

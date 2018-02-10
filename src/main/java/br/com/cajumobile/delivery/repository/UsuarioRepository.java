@@ -11,4 +11,11 @@ public class UsuarioRepository extends GenericRepository<Usuario> {
                 .setParameter("authorization", authorization)
                 .getSingleResult();
     }
+
+    public Usuario findByLoginAndSenha(String login, String senha) {
+        return entityManager.createQuery("FROM Usuario u WHERE u.login = :login AND u.senha = :senha", Usuario.class)
+                .setParameter("login", login)
+                .setParameter("senha", senha)
+                .getSingleResult();
+    }
 }
