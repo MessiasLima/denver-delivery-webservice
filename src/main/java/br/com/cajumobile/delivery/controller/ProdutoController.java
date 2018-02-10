@@ -8,17 +8,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/tipo-produto")
-public class TipoProdutoController {
+@RequestMapping("/produto")
+public class ProdutoController {
 
     @Autowired
     private TipoProdutoService tipoProdutoService;
 
-    @RequestMapping
-    public ResponseEntity<?> listarTodos(){
-        try{
+    @RequestMapping("/tipo")
+    public ResponseEntity<?> listarTodos() {
+        try {
             return new ResponseEntity<>(tipoProdutoService.listarTodos(), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
