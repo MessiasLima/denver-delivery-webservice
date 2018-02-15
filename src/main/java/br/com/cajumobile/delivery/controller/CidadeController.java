@@ -22,24 +22,31 @@ public class CidadeController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> saveCidade(
             @RequestAttribute(SecurityConfiguration.AUTHETICATED_USER) Usuario usuario,
-            @RequestParam("nome") String nomeCidade)
-    {
+            @RequestParam("nome") String nomeCidade) {
         try {
-            cidadeService.saveCidade(usuario, nomeCidade);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (NoPermissionException e) { ;
+            Cidade cidade = cidadeService.saveCidade(usuario, nomeCidade);
+            return new ResponseEntity<>(cidade, HttpStatus.OK);
+        } catch (NoPermissionException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
 
     @RequestMapping
-    public ResponseEntity<?> listCidades(){
+    public ResponseEntity<?> listCidades() {
         List<Cidade> cidades = cidadeService.listCidades();
         return new ResponseEntity<>(cidades, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    public ResponseEntity<?> updateCidade(@RequestBody Cidade cidade){
+    public ResponseEntity<?> updateCidade(@RequestBody Cidade cidade) {
         return new ResponseEntity<Cidade>(cidadeService.updateCidade(cidade), HttpStatus.OK);
     }
+
+    @RequestMapping(method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteCidade(@RequestParam("id") Integer idCidade) {
+        cidadeService.deleteCidade(idCidade);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
 }

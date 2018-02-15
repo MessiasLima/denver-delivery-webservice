@@ -18,7 +18,7 @@ public class CidadeService {
     private CidadeRepository cidadeRepository;
 
     @Transactional
-    public void saveCidade(Usuario usuario, String nomeCidade) throws NoPermissionException {
+    public Cidade saveCidade(Usuario usuario, String nomeCidade) throws NoPermissionException {
         if (!usuario.getTipo().equals(TipoUsuario.ADM_SISTEMA)){
             throw new NoPermissionException();
         }
@@ -26,7 +26,7 @@ public class CidadeService {
         Cidade cidade = new Cidade();
         cidade.setNome(nomeCidade);
 
-        cidadeRepository.save(cidade);
+        return cidadeRepository.saveOrUpdate(cidade);
     }
 
     public List<Cidade> listCidades() {
@@ -36,5 +36,10 @@ public class CidadeService {
     @Transactional
     public Cidade updateCidade(Cidade cidade) {
         return cidadeRepository.saveOrUpdate(cidade);
+    }
+
+    @Transactional
+    public void deleteCidade(Integer idCidade) {
+        cidadeRepository.deleteById(idCidade);
     }
 }

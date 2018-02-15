@@ -10,4 +10,10 @@ public class CidadeRepository extends GenericRepository<Cidade> {
     public List<Cidade> listCidades() {
         return entityManager.createQuery("FROM Cidade c", Cidade.class).getResultList();
     }
+
+    public void deleteById(Integer idCidade) {
+        entityManager.createQuery("DELETE FROM Cidade c WHERE c.id = :idCidade")
+                .setParameter("idCidade", idCidade)
+                .executeUpdate();
+    }
 }

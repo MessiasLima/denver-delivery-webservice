@@ -20,7 +20,7 @@ public class GenericRepository<T> {
     }
 
 
-    public void remover(T entity){
+    public void delete(T entity){
         entityManager.remove(entity);
     }
 }
