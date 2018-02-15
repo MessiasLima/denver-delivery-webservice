@@ -42,8 +42,4 @@ public class Usuario {
     @Setter
     private String email;
 
-    @Getter
-    @Setter
-    @Column(name = "id_estabelecimento")
-    private Integer idEstabelecimento;
 }
