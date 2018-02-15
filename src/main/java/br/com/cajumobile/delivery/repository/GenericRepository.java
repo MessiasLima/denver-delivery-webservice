@@ -10,7 +10,7 @@ public class GenericRepository<T> {
     @PersistenceContext
     protected EntityManager entityManager;
 
-    public void salvar(T entity){
+    public void save(T entity){
         entityManager.persist(entity);
     }
 
