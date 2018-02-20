@@ -47,6 +47,4 @@ public class CidadeController {
         cidadeService.deleteCidade(idCidade);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
 }

@@ -16,4 +16,10 @@ public class CidadeRepository extends GenericRepository<Cidade> {
                 .setParameter("idCidade", idCidade)
                 .executeUpdate();
     }
+
+    public Cidade findById(Integer idCidade) {
+        return entityManager.createQuery("FROM Cidade c WHERE c.id = :id", Cidade.class)
+                .setParameter("id", idCidade)
+                .getSingleResult();
+    }
 }

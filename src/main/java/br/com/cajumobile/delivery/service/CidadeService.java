@@ -42,4 +42,8 @@ public class CidadeService {
     public void deleteCidade(Integer idCidade) {
         cidadeRepository.deleteById(idCidade);
     }
+
+    public Cidade findById(Integer idCidade) {
+        return cidadeRepository.findById(idCidade);
+    }
 }
