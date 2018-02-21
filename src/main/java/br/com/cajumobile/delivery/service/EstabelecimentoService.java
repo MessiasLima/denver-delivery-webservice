@@ -7,6 +7,7 @@ import br.com.cajumobile.delivery.repository.EstabelecimentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -18,7 +19,7 @@ public class EstabelecimentoService {
     @Autowired
     private EstabelecimentoRepository estabelecimentoRepository;
 
-    public List<Estabelecimento> listEstabelecimentosByUsuario(Usuario usuario) {
+    public List<Estabelecimento> listByUsuario(Usuario usuario) {
         List<Estabelecimento> estabelecimentos = listByUsuarioType(usuario);
         estabelecimentos.forEach(estabelecimento -> {
             estabelecimento.setCidade(cidadeService.findById(estabelecimento.getIdCidade()));
@@ -32,5 +33,10 @@ public class EstabelecimentoService {
         }else {
             return estabelecimentoRepository.listByIdUsuario(usuario.getId());
         }
+    }
+
+    @Transactional
+    public Estabelecimento save(Estabelecimento estabelecimento) {
+        return estabelecimentoRepository.saveOrUpdate(estabelecimento);
     }
 }
