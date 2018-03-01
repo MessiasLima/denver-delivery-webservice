@@ -66,6 +66,7 @@ public class UsuarioService {
     public void delete(Usuario userAuthenticated, Integer idUsuario) throws EntityNotFoundException, NoPermissionException {
         Usuario usuarioToDelete = usuarioRepository.findById(idUsuario);
         if (hasPermissionToDelete(userAuthenticated, usuarioToDelete)) {
+            usuarioEstabelecimentoRepository.deleteByUsuario(usuarioToDelete.getId());
             usuarioRepository.delete(usuarioToDelete);
         } else {
             throw new NoPermissionException();

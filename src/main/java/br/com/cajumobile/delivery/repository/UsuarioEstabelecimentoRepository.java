@@ -12,4 +12,10 @@ public class UsuarioEstabelecimentoRepository extends GenericRepository<UsuarioE
                 .setParameter("id",idEstabelecimento )
                 .getResultList();
     }
+
+    public void deleteByUsuario(Integer idUsuario) {
+        entityManager.createQuery("DELETE FROM UsuarioEstabelecimento ue WHERE ue.idUsuario = :id")
+                .setParameter("id", idUsuario)
+                .executeUpdate();
+    }
 }
