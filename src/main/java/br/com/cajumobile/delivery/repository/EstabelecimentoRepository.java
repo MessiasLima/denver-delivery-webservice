@@ -15,10 +15,15 @@ public class EstabelecimentoRepository extends GenericRepository<Estabelecimento
             "      ON ue.id_estabelecimento = e.id " +
             "WHERE ue.id_usuario = :idUsuario";
 
+    protected EstabelecimentoRepository() {
+        super(Estabelecimento.class);
+    }
+
     public List<Estabelecimento> listAll() {
         return entityManager.createQuery("FROM Estabelecimento", Estabelecimento.class).getResultList();
     }
 
+    @SuppressWarnings("unchecked")
     public List<Estabelecimento> listByIdUsuario(Integer id) {
         return (List<Estabelecimento>) entityManager.createNativeQuery(QUERY_SELECT_ESTABELECIMETOS_BY_ID_USUARIO, Estabelecimento.class)
                 .setParameter("idUsuario", id)
