@@ -5,6 +5,7 @@ import br.com.cajumobile.delivery.exception.InvalidFileException;
 import br.com.cajumobile.delivery.model.Estabelecimento;
 import br.com.cajumobile.delivery.model.Usuario;
 import br.com.cajumobile.delivery.model.enun.FileType;
+import br.com.cajumobile.delivery.model.enun.StatusEstabelecimento;
 import br.com.cajumobile.delivery.model.enun.TipoUsuario;
 import br.com.cajumobile.delivery.repository.EstabelecimentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,11 +46,14 @@ public class EstabelecimentoService {
 
     @Transactional
     public Estabelecimento save(Estabelecimento estabelecimento) {
+        if (estabelecimento.getStatus() == null) {
+            estabelecimento.setStatus(StatusEstabelecimento.ATIVO);
+        }
         return estabelecimentoRepository.saveOrUpdate(estabelecimento);
     }
 
     @Transactional
-    public void updateImage(MultipartFile file, Integer idEstabelecimento) throws EntityNotFoundException,  InvalidFileException, IOException {
+    public void updateImage(MultipartFile file, Integer idEstabelecimento) throws EntityNotFoundException, InvalidFileException, IOException {
         validateFile(file);
         String fileName = fileService.storeFile(file, FileType.ESTABELECIMENTO_IMAGE, idEstabelecimento);
         Estabelecimento estabelecimento = estabelecimentoRepository.findById(idEstabelecimento);
