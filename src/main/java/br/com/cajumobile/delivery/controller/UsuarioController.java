@@ -48,7 +48,11 @@ public class UsuarioController {
 
     @GetMapping("/estabelecimento/{idEstabelecimento}")
     public ResponseEntity<?> listUsuariosByEstabelecimento(@PathVariable("idEstabelecimento") Integer idEstabelecimento) {
-        return new ResponseEntity<>(usuarioService.listByEstabelecimento(idEstabelecimento), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(usuarioService.listByEstabelecimento(idEstabelecimento), HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
     }
 
     @DeleteMapping("/{idUsuario}")

@@ -52,8 +52,11 @@ public class UsuarioService {
         return usuarioRepository.listAdmSistema();
     }
 
-    public List<Usuario> listByEstabelecimento(Integer idEstabelecimento) {
+    public List<Usuario> listByEstabelecimento(Integer idEstabelecimento) throws EntityNotFoundException {
         List<UsuarioEstabelecimento> usuariosEstabelecimento = usuarioEstabelecimentoRepository.listByIdEstabelecimento(idEstabelecimento);
+        if (usuariosEstabelecimento.isEmpty()) {
+            throw new EntityNotFoundException(usuariosEstabelecimento.getClass(), 0);
+        }
         return usuarioRepository.findByIds(getIds(usuariosEstabelecimento));
     }
 

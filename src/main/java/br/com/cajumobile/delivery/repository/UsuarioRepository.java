@@ -32,7 +32,7 @@ public class UsuarioRepository extends GenericRepository<Usuario> {
 
     public List<Usuario> findByIds(List<Integer> ids) {
         return entityManager.createQuery("FROM Usuario u WHERE u.id in(:ids)", Usuario.class)
-                .setParameter("ids", ids)
+                .setParameter("ids", ids.toArray())
                 .getResultList();
     }
 }
