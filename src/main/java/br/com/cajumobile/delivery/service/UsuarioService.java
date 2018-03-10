@@ -42,7 +42,9 @@ public class UsuarioService {
 
     @Transactional
     public Usuario saveUser(Usuario usuario) {
-        usuario.setSenha(Utils.md5(usuario.getSenha()));
+        if (usuario.getId() == null) {
+            usuario.setSenha(Utils.md5(usuario.getSenha()));
+        }
         return usuarioRepository.saveOrUpdate(usuario);
     }
 
