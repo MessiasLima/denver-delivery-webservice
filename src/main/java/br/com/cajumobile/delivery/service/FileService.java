@@ -1,14 +1,13 @@
 package br.com.cajumobile.delivery.service;
 
 import br.com.cajumobile.delivery.exception.FileNotFoundException;
-import br.com.cajumobile.delivery.model.enun.FileType;
-import br.com.cajumobile.delivery.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
 import java.io.*;
+import java.util.UUID;
 
 @Service
 public class FileService {
@@ -18,8 +17,8 @@ public class FileService {
 
     private static final String FILE_FOLDER = "files/";
 
-    public String storeFile(MultipartFile multipartFile, FileType fileType, Integer identifier) throws IOException {
-        String fileName = Utils.md5(fileType.toString() + identifier) + "." + getExtension(multipartFile);
+    public String storeFile(MultipartFile multipartFile) throws IOException {
+        String fileName = UUID.randomUUID().toString() + "." + getExtension(multipartFile);
         File file = new File(FILE_FOLDER);
         if (!file.exists()) {
             file.mkdirs();
@@ -47,5 +46,12 @@ public class FileService {
     private String getExtension(String fileName) {
         String[] split = fileName.split("\\.");
         return split[split.length - 1];
+    }
+
+    public void deleteFileIfExists(String fileName) {
+        File file = new File(FILE_FOLDER + "/" + fileName);
+        if (file.exists()){
+            file.delete();
+        }
     }
 }

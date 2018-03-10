@@ -4,7 +4,6 @@ import br.com.cajumobile.delivery.exception.EntityNotFoundException;
 import br.com.cajumobile.delivery.exception.InvalidFileException;
 import br.com.cajumobile.delivery.model.Estabelecimento;
 import br.com.cajumobile.delivery.model.Usuario;
-import br.com.cajumobile.delivery.model.enun.FileType;
 import br.com.cajumobile.delivery.model.enun.StatusEstabelecimento;
 import br.com.cajumobile.delivery.model.enun.TipoUsuario;
 import br.com.cajumobile.delivery.repository.EstabelecimentoRepository;
@@ -55,10 +54,22 @@ public class EstabelecimentoService {
     @Transactional
     public void updateImage(MultipartFile file, Integer idEstabelecimento) throws EntityNotFoundException, InvalidFileException, IOException {
         validateFile(file);
-        String fileName = fileService.storeFile(file, FileType.ESTABELECIMENTO_IMAGE, idEstabelecimento);
+        deleteImageIfExists(idEstabelecimento);
+        String fileName = fileService.storeFile(file);
         Estabelecimento estabelecimento = estabelecimentoRepository.findById(idEstabelecimento);
         estabelecimento.setUrlImage(fileName);
         save(estabelecimento);
+    }
+
+    private void deleteImageIfExists(Integer idEstabelecimento) throws EntityNotFoundException {
+        Estabelecimento estabelecimento = findById(idEstabelecimento);
+        if (estabelecimento.getUrlImage() != null){
+            fileService.deleteFileIfExists(estabelecimento.getUrlImage());
+        }
+    }
+
+    public Estabelecimento findById(Integer idEstabelecimento) throws EntityNotFoundException{
+        return estabelecimentoRepository.findById(idEstabelecimento);
     }
 
     private void validateFile(MultipartFile file) throws InvalidFileException {
