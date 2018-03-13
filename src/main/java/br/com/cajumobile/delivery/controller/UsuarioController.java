@@ -31,13 +31,28 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<?> saveUsuario(@RequestBody Usuario usuario) {
+    public ResponseEntity<?> saveUsuarioAdministrador(@RequestBody Usuario usuario, @RequestAttribute(SecurityConfiguration.AUTHETICATED_USER) Usuario usuarioAuthenticated) {
         try {
-            return new ResponseEntity<>(usuarioService.saveUser(usuario), HttpStatus.OK);
-        } catch (EmptyResultDataAccessException | NoResultException noResultException) {
+            return new ResponseEntity<>(usuarioService.saveUserAdm(usuario, usuarioAuthenticated), HttpStatus.OK);
+        } catch (EmptyResultDataAccessException | NoResultException | NoPermissionException noResultException) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } catch (DataIntegrityViolationException exc) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
+    @PostMapping("/estabelecimento/{idEstabelecimento}")
+    public ResponseEntity<?> saveUsuarioEstabelecimento(
+            @RequestAttribute(SecurityConfiguration.AUTHETICATED_USER) Usuario authenticatedUser,
+            @RequestBody Usuario userTosave,
+            @PathVariable Integer idEstabelecimento
+    ) {
+        Usuario savedUser = null;
+        try {
+            savedUser = usuarioService.saveUserEstabelecimento(authenticatedUser, userTosave, idEstabelecimento);
+            return ResponseEntity.ok(savedUser);
+        } catch (NoPermissionException e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -64,7 +79,7 @@ public class UsuarioController {
             return ResponseEntity.badRequest().body(e.getCauseDTO());
         } catch (NoPermissionException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
         }
 

@@ -41,11 +41,22 @@ public class UsuarioService {
     }
 
     @Transactional
-    public Usuario saveUser(Usuario usuario) {
+    public Usuario saveUserAdm(Usuario usuario, Usuario usuarioAuthenticated) throws NoPermissionException {
+        if (!hasPermissionToSaveUserADM(usuarioAuthenticated)) {
+            throw new NoPermissionException();
+        }
+        return saveUser(usuario);
+    }
+
+    private Usuario saveUser(Usuario usuario) {
         if (usuario.getId() == null) {
             usuario.setSenha(Utils.md5(usuario.getSenha()));
         }
         return usuarioRepository.saveOrUpdate(usuario);
+    }
+
+    private boolean hasPermissionToSaveUserADM(Usuario usuarioAuthenticated) {
+        return usuarioAuthenticated.getTipo().equals(TipoUsuario.ADM_SISTEMA);
     }
 
     public List<Usuario> listAdmSistema() {
@@ -78,6 +89,7 @@ public class UsuarioService {
         }
     }
 
+
     private boolean hasPermissionToDelete(Usuario userAuthenticated, Usuario usuarioToDelete) {
         switch (userAuthenticated.getTipo()) {
             case ADM_SISTEMA:
@@ -90,4 +102,27 @@ public class UsuarioService {
                 return false;
         }
     }
+
+    @Transactional
+    public Usuario saveUserEstabelecimento(Usuario authenticatedUser, Usuario userTosave, Integer idEstabelecimento) throws NoPermissionException {
+
+        if (!hasPermissionToSaveUserEstabelecimento(authenticatedUser)){
+            throw new NoPermissionException();
+        }
+
+        Usuario savedUser = saveUser(userTosave);
+
+        UsuarioEstabelecimento usuarioEstabelecimento = new UsuarioEstabelecimento();
+        usuarioEstabelecimento.setIdEstabelecimento(idEstabelecimento);
+        usuarioEstabelecimento.setIdUsuario(savedUser.getId());
+
+        usuarioEstabelecimentoRepository.save(usuarioEstabelecimento);
+
+        return savedUser;
+    }
+
+    private boolean hasPermissionToSaveUserEstabelecimento(Usuario authenticatedUser) {
+        return authenticatedUser.getTipo().equals(TipoUsuario.ADM_SISTEMA) || authenticatedUser.getTipo().equals(TipoUsuario.ADM_ESTABELECIMENTO);
+    }
+
 }
