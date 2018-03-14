@@ -77,7 +77,6 @@ public class UsuarioService {
         return integers;
     }
 
-
     @Transactional
     public void delete(Usuario userAuthenticated, Integer idUsuario) throws EntityNotFoundException, NoPermissionException {
         Usuario usuarioToDelete = usuarioRepository.findById(idUsuario);

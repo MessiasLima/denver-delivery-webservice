@@ -1,6 +1,5 @@
 package br.com.cajumobile.delivery.configuration;
 
-import br.com.cajumobile.delivery.configuration.interceptor.AdmSistemaInterceptor;
 import br.com.cajumobile.delivery.configuration.interceptor.AuthenticationInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,19 +17,11 @@ public class SecurityConfiguration extends WebMvcConfigurerAdapter {
         return new AuthenticationInterceptor();
     }
 
-    @Bean
-    public AdmSistemaInterceptor getAdmProfileInterceptor() {
-        return new AdmSistemaInterceptor();
-    }
-
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(getAuthenticationInterceptor())
                 .addPathPatterns("/**/*")
                 .excludePathPatterns("/usuario/login", "/error", "/download/**/*");
-
-        registry.addInterceptor(getAdmProfileInterceptor())
-                .addPathPatterns("/cidade");
     }
 
     @Override
