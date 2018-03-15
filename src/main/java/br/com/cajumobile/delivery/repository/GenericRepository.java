@@ -5,6 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.util.List;
 
 @Repository
 public class GenericRepository<T> {
@@ -38,5 +42,17 @@ public class GenericRepository<T> {
             throw new EntityNotFoundException(clazz, id);
         }
         return entity;
+    }
+
+    public List<T> findAll() throws EntityNotFoundException{
+        CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
+        CriteriaQuery<T> cq = builder.createQuery(clazz);
+        Root<T> root = cq.from(clazz);
+        cq.select(root);
+        List<T> entities = this.entityManager.createQuery(cq).getResultList();
+        if (entities == null || entities.isEmpty()) {
+            throw new EntityNotFoundException(clazz, 0);
+        }
+        return entities;
     }
 }

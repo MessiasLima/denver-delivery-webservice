@@ -7,6 +7,11 @@ import java.util.List;
 
 @Repository
 public class CidadeRepository extends GenericRepository<Cidade> {
+
+    public CidadeRepository() {
+        super(Cidade.class);
+    }
+
     public List<Cidade> listCidades() {
         return entityManager.createQuery("FROM Cidade c", Cidade.class).getResultList();
     }

@@ -7,6 +7,11 @@ import java.util.List;
 
 @Repository
 public class UsuarioEstabelecimentoRepository extends GenericRepository<UsuarioEstabelecimento> {
+
+    public UsuarioEstabelecimentoRepository() {
+        super(UsuarioEstabelecimento.class);
+    }
+
     public List<UsuarioEstabelecimento> listByIdEstabelecimento(Integer idEstabelecimento) {
         return entityManager.createQuery("FROM UsuarioEstabelecimento ue WHERE ue.idEstabelecimento = :id", UsuarioEstabelecimento.class)
                 .setParameter("id",idEstabelecimento )
