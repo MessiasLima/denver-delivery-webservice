@@ -23,4 +23,8 @@ public class TipoProdutoService {
     public TipoProduto saveOrUpdate(TipoProduto tipoProduto) {
         return tipoProdutoRepository.saveOrUpdate(tipoProduto);
     }
+
+    public void delete(TipoProduto tipoProduto) {
+        tipoProdutoRepository.delete(tipoProduto);
+    }
 }

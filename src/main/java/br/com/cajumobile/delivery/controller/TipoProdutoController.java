@@ -21,6 +21,12 @@ public class TipoProdutoController {
         return ResponseEntity.ok(tipoProdutoService.saveOrUpdate(tipoProduto));
     }
 
+    @DeleteMapping
+    public ResponseEntity<?> delete(@RequestBody TipoProduto tipoProduto){
+        tipoProdutoService.delete(tipoProduto);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping
     public ResponseEntity<List<TipoProduto>> list() {
         try {
