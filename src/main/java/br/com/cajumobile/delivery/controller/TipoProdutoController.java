@@ -4,6 +4,7 @@ import br.com.cajumobile.delivery.exception.EntityNotFoundException;
 import br.com.cajumobile.delivery.model.TipoProduto;
 import br.com.cajumobile.delivery.service.TipoProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,10 +22,14 @@ public class TipoProdutoController {
         return ResponseEntity.ok(tipoProdutoService.saveOrUpdate(tipoProduto));
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> delete(@RequestBody TipoProduto tipoProduto){
-        tipoProdutoService.delete(tipoProduto);
-        return ResponseEntity.ok().build();
+    @DeleteMapping("/{idTipoProduto}")
+    public ResponseEntity<?> delete(@PathVariable("idTipoProduto") Integer idTipoProduto) {
+        try {
+            tipoProdutoService.delete(idTipoProduto);
+            return ResponseEntity.ok().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @GetMapping

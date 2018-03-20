@@ -24,7 +24,9 @@ public class TipoProdutoService {
         return tipoProdutoRepository.saveOrUpdate(tipoProduto);
     }
 
-    public void delete(TipoProduto tipoProduto) {
+    @Transactional
+    public void delete(Integer idTipoProduto) throws EntityNotFoundException {
+        TipoProduto tipoProduto = tipoProdutoRepository.findById(idTipoProduto);
         tipoProdutoRepository.delete(tipoProduto);
     }
 }
