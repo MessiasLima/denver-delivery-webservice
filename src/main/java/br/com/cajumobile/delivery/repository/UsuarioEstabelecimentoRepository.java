@@ -14,7 +14,7 @@ public class UsuarioEstabelecimentoRepository extends GenericRepository<UsuarioE
 
     public List<UsuarioEstabelecimento> listByIdEstabelecimento(Integer idEstabelecimento) {
         return entityManager.createQuery("FROM UsuarioEstabelecimento ue WHERE ue.idEstabelecimento = :id", UsuarioEstabelecimento.class)
-                .setParameter("id",idEstabelecimento )
+                .setParameter("id", idEstabelecimento)
                 .getResultList();
     }
 
@@ -22,5 +22,10 @@ public class UsuarioEstabelecimentoRepository extends GenericRepository<UsuarioE
         entityManager.createQuery("DELETE FROM UsuarioEstabelecimento ue WHERE ue.idUsuario = :id")
                 .setParameter("id", idUsuario)
                 .executeUpdate();
+    }
+
+    public List<UsuarioEstabelecimento> findByUsuario(Integer idUsuario) {
+        return entityManager.createQuery("FROM UsuarioEstabelecimento WHERE idUsuario = :idUsuario", UsuarioEstabelecimento.class)
+                .getResultList();
     }
 }

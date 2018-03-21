@@ -29,4 +29,8 @@ public class TipoProdutoService {
         TipoProduto tipoProduto = tipoProdutoRepository.findById(idTipoProduto);
         tipoProdutoRepository.delete(tipoProduto);
     }
+
+    public TipoProduto findById(Integer id) throws EntityNotFoundException {
+        return tipoProdutoRepository.findById(id);
+    }
 }
