@@ -1,6 +1,7 @@
 package br.com.cajumobile.delivery.service;
 
 import br.com.cajumobile.delivery.exception.FileNotFoundException;
+import br.com.cajumobile.delivery.exception.InvalidFileException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,8 +51,15 @@ public class FileService {
 
     public void deleteFileIfExists(String fileName) {
         File file = new File(FILE_FOLDER + "/" + fileName);
-        if (file.exists()){
+        if (file.exists()) {
             file.delete();
+        }
+    }
+
+    public void validateImageFile(MultipartFile file) throws InvalidFileException {
+        String extension = getExtension(file);
+        if ((!extension.equals("jpg")) && (!extension.equals("png"))) {
+            throw new InvalidFileException("Invalid extension");
         }
     }
 }

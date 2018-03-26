@@ -53,7 +53,7 @@ public class EstabelecimentoService {
 
     @Transactional
     public void updateImage(MultipartFile file, Integer idEstabelecimento) throws EntityNotFoundException, InvalidFileException, IOException {
-        validateFile(file);
+        fileService.validateImageFile(file);
         deleteImageIfExists(idEstabelecimento);
         String fileName = fileService.storeFile(file);
         Estabelecimento estabelecimento = estabelecimentoRepository.findById(idEstabelecimento);
@@ -72,10 +72,4 @@ public class EstabelecimentoService {
         return estabelecimentoRepository.findById(idEstabelecimento);
     }
 
-    private void validateFile(MultipartFile file) throws InvalidFileException {
-        String extension = fileService.getExtension(file);
-        if ((!extension.equals("jpg")) && (!extension.equals("png"))) {
-            throw new InvalidFileException("Invalid extension");
-        }
-    }
 }

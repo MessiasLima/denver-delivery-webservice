@@ -1,14 +1,17 @@
 package br.com.cajumobile.delivery.service;
 
 import br.com.cajumobile.delivery.exception.EntityNotFoundException;
+import br.com.cajumobile.delivery.exception.InvalidFileException;
 import br.com.cajumobile.delivery.exception.NoPermissionException;
 import br.com.cajumobile.delivery.model.Produto;
 import br.com.cajumobile.delivery.model.Usuario;
 import br.com.cajumobile.delivery.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -22,6 +25,9 @@ public class ProdutoService {
 
     @Autowired
     private SecurityService securityService;
+
+    @Autowired
+    private FileService fileService;
 
     @Transactional
     public Produto save(Usuario usuario, Produto produto) throws NoPermissionException {
@@ -67,5 +73,25 @@ public class ProdutoService {
                 throw new NoPermissionException();
             }
         }
+    }
+
+    @Transactional
+    public void updateImage(MultipartFile file, Integer idProduto) throws InvalidFileException, EntityNotFoundException, IOException {
+        fileService.validateImageFile(file);
+        Produto produto = findById(idProduto);
+        deleteImageIfExists(produto);
+        String fileName = fileService.storeFile(file);
+        produto.setImagem(fileName);
+        produtoRepository.save(produto);
+    }
+
+    private void deleteImageIfExists(Produto produto) throws EntityNotFoundException {
+        if (produto.getImagem() != null){
+            fileService.deleteFileIfExists(produto.getImagem());
+        }
+    }
+
+    public Produto findById(Integer idProduto) throws EntityNotFoundException {
+        return produtoRepository.findById(idProduto);
     }
 }
