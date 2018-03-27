@@ -18,4 +18,9 @@ public class TipoProduto {
     @Getter
     @Setter
     private String nome;
+
+    @Getter
+    @Setter
+    @Column(name = "id_estabelecimento")
+    private Integer idEstabelecimento;
 }
