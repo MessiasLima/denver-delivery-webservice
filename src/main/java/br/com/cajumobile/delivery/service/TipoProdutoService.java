@@ -33,4 +33,8 @@ public class TipoProdutoService {
     public TipoProduto findById(Integer id) throws EntityNotFoundException {
         return tipoProdutoRepository.findById(id);
     }
+
+    public List<TipoProduto> listarPorEstabelecimento(Integer idEstabelecimento) {
+        return tipoProdutoRepository.listarPorEstabelecimento(idEstabelecimento);
+    }
 }

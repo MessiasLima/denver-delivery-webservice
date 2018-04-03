@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("produto/tipo")
+@SuppressWarnings("unused")
 public class TipoProdutoController {
 
     @Autowired
@@ -39,6 +40,11 @@ public class TipoProdutoController {
         } catch (EntityNotFoundException e) {
             return ResponseEntity.noContent().build();
         }
+    }
+
+    @GetMapping("/estabelecimento/{idEstabelecimento}")
+    public ResponseEntity<List<TipoProduto>> listarTipoProdutoPorEstabelecimento(@PathVariable("idEstabelecimento") Integer idEstabelecimento) {
+        return ResponseEntity.ok(tipoProdutoService.listarPorEstabelecimento(idEstabelecimento));
     }
 
 }
