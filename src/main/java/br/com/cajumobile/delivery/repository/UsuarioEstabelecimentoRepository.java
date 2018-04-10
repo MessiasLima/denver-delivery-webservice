@@ -26,6 +26,7 @@ public class UsuarioEstabelecimentoRepository extends GenericRepository<UsuarioE
 
     public List<UsuarioEstabelecimento> findByUsuario(Integer idUsuario) {
         return entityManager.createQuery("FROM UsuarioEstabelecimento WHERE idUsuario = :idUsuario", UsuarioEstabelecimento.class)
+                .setParameter("idUsuario", idUsuario)
                 .getResultList();
     }
 }
