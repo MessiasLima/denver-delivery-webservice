@@ -4,10 +4,7 @@ import br.com.cajumobile.delivery.model.FormaPagamento;
 import br.com.cajumobile.delivery.service.FormaPagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,5 +36,10 @@ public class FormaPagamentoController {
         } else {
             return ResponseEntity.ok(formaPagamentos);
         }
+    }
+
+    @PostMapping
+    public ResponseEntity<FormaPagamento> salvarFormaPagamento(@RequestBody FormaPagamento formaPagamento){
+        return ResponseEntity.ok(formaPagamentoService.salvar(formaPagamento));
     }
 }

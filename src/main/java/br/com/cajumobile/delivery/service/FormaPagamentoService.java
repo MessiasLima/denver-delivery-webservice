@@ -6,6 +6,7 @@ import br.com.cajumobile.delivery.repository.FormaPagamentoRespository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,5 +29,10 @@ public class FormaPagamentoService {
         List<Integer> idsFormasPagamento = new ArrayList<>();
         estabelecimentoFormaPagamentos.forEach(estabelecimentoFormaPagamento -> idsFormasPagamento.add(estabelecimentoFormaPagamento.getIdFormaPagamento()));
         return idsFormasPagamento;
+    }
+
+    @Transactional
+    public FormaPagamento salvar(FormaPagamento formaPagamento) {
+        return formaPagamentoRespository.save(formaPagamento);
     }
 }
