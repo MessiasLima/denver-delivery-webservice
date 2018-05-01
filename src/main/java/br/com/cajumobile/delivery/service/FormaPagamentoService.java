@@ -2,7 +2,6 @@ package br.com.cajumobile.delivery.service;
 
 import br.com.cajumobile.delivery.model.EstabelecimentoFormaPagamento;
 import br.com.cajumobile.delivery.model.FormaPagamento;
-import br.com.cajumobile.delivery.repository.EstabelecimentoFormaPagamentoRepository;
 import br.com.cajumobile.delivery.repository.FormaPagamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,9 +16,6 @@ public class FormaPagamentoService {
     @Autowired
     private FormaPagamentoRepository formaPagamentoRespository;
 
-
-    @Autowired
-    private EstabelecimentoFormaPagamentoRepository estabelecimentoFormaPagamentoRepository;
 
     public List<FormaPagamento> listarTodos() {
         return formaPagamentoRespository.findAll();
@@ -43,15 +39,38 @@ public class FormaPagamentoService {
 
     @Transactional
     public void salvarPorEstabelecimento(List<FormaPagamento> formaPagamentos, Integer idEstabelecimento) {
-        estabelecimentoFormaPagamentoRepository.saveOrUpdateList(montarEstabelecimentosFormaPagamento(formaPagamentos, idEstabelecimento));
+        List<EstabelecimentoFormaPagamento> estabelecimentoFormaPagamentosSalvos = formaPagamentoRespository.listarEstabelecimentoFormaPagamentoPorEstabelecimento(idEstabelecimento);
+        salvarOsQueVieramNaLista(formaPagamentos, idEstabelecimento, estabelecimentoFormaPagamentosSalvos);
+        deletarOsQueNaoVieraNaLista(formaPagamentos, idEstabelecimento, estabelecimentoFormaPagamentosSalvos);
     }
 
-    private List<EstabelecimentoFormaPagamento> montarEstabelecimentosFormaPagamento(List<FormaPagamento> formaPagamentos, Integer idEstabelecimento) {
-        List<EstabelecimentoFormaPagamento> estabelecimentoFormaPagamentos = new ArrayList<>();
-        formaPagamentos.forEach(formaPagamento -> {
-            estabelecimentoFormaPagamentos.add(new EstabelecimentoFormaPagamento(formaPagamento.getId(), idEstabelecimento));
+    private void deletarOsQueNaoVieraNaLista(List<FormaPagamento> formaPagamentos, Integer idEstabelecimento, List<EstabelecimentoFormaPagamento> estabelecimentoFormaPagamentosSalvos) {
+        estabelecimentoFormaPagamentosSalvos.forEach(estabelecimentoFormaPagamentoSalvo ->{
+            List<EstabelecimentoFormaPagamento> estabelecimentoFormaPagamentosNaoSalvos = formaPagamentoParaTabelaDeRelacaoLista(formaPagamentos, idEstabelecimento);
+            if (!estabelecimentoFormaPagamentosNaoSalvos.contains(estabelecimentoFormaPagamentoSalvo)){
+                formaPagamentoRespository.deletarEstabelecimentoFormaPagamento(idEstabelecimento, estabelecimentoFormaPagamentoSalvo.getIdFormaPagamento());
+            }
         });
-        return estabelecimentoFormaPagamentos;
     }
+
+    private List<EstabelecimentoFormaPagamento> formaPagamentoParaTabelaDeRelacaoLista(List<FormaPagamento> formaPagamentos, Integer idEstabelecimento) {
+        List<EstabelecimentoFormaPagamento> retorno = new ArrayList<>();
+        formaPagamentos.forEach(formaPagamento -> retorno.add(new EstabelecimentoFormaPagamento(formaPagamento.getId(),idEstabelecimento)));
+        return retorno;
+    }
+
+    private void salvarOsQueVieramNaLista(List<FormaPagamento> formaPagamentos, Integer idEstabelecimento, List<EstabelecimentoFormaPagamento> estabelecimentoFormaPagamentosSalvos) {
+        formaPagamentos.forEach(formaPagamento -> {
+            EstabelecimentoFormaPagamento estabelecimentoFormaPagamentoNaoSalvo = formaPagamentoParaTabelaDeRelacao(formaPagamento, idEstabelecimento);
+            if (!estabelecimentoFormaPagamentosSalvos.contains(estabelecimentoFormaPagamentoNaoSalvo)){
+                formaPagamentoRespository.salvarEstabelecimentoFormaPagamento(estabelecimentoFormaPagamentoNaoSalvo.getIdEstabelecimento(),estabelecimentoFormaPagamentoNaoSalvo.getIdFormaPagamento());
+            }
+        });
+    }
+
+    private EstabelecimentoFormaPagamento formaPagamentoParaTabelaDeRelacao(FormaPagamento formaPagamento, Integer idEstabelecimento) {
+        return new EstabelecimentoFormaPagamento(formaPagamento.getId(), idEstabelecimento);
+    }
+
 
 }
