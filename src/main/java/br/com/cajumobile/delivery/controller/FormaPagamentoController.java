@@ -5,6 +5,7 @@ import br.com.cajumobile.delivery.service.FormaPagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,8 +20,20 @@ public class FormaPagamentoController {
     private FormaPagamentoService formaPagamentoService;
 
     @GetMapping
-    public ResponseEntity<?> listarTodos() {
+    public ResponseEntity<List<FormaPagamento>> listarTodos() {
         List<FormaPagamento> formaPagamentos = formaPagamentoService.listarTodos();
+        if (formaPagamentos == null || formaPagamentos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.ok(formaPagamentos);
+        }
+    }
+
+    @GetMapping("estabelecimento/{idEstabelecimento}")
+    public ResponseEntity<List<FormaPagamento>> listarPorEstabelecimento(
+            @PathVariable("idEstabelecimento") Integer idEstabelecimento
+    ) {
+        List<FormaPagamento> formaPagamentos = formaPagamentoService.listarPorEstabelecimento(idEstabelecimento);
         if (formaPagamentos == null || formaPagamentos.isEmpty()) {
             return ResponseEntity.noContent().build();
         } else {
