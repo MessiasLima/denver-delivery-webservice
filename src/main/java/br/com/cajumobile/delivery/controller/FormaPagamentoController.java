@@ -50,6 +50,6 @@ public class FormaPagamentoController {
             @PathVariable("idEstabelecimento") Integer idEstabelecimento
     ) {
         formaPagamentoService.salvarPorEstabelecimento(formaPagamentos, idEstabelecimento);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }
