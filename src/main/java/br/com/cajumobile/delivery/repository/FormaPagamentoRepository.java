@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface FormaPagamentoRespository extends JpaRepository<FormaPagamento, Integer> {
+public interface FormaPagamentoRepository extends JpaRepository<FormaPagamento, Integer> {
 
     @Query("FROM EstabelecimentoFormaPagamento efp WHERE efp.idEstabelecimento = :idEstabelecimento")
     List<EstabelecimentoFormaPagamento> listarEstabelecimentoFormaPagamentoPorEstabelecimento(@Param("idEstabelecimento") Integer idEstabelecimento);

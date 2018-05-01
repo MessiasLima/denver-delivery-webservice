@@ -24,4 +24,11 @@ public class EstabelecimentoFormaPagamento implements Serializable {
     @Setter
     @Column(name = "id_forma_pagamento")
     private Integer idFormaPagamento;
+
+    public EstabelecimentoFormaPagamento(){}
+
+    public EstabelecimentoFormaPagamento(Integer idFormaPagamento, Integer idEstabelecimento) {
+        this.idEstabelecimento = idEstabelecimento;
+        this.idFormaPagamento = idFormaPagamento;
+    }
 }

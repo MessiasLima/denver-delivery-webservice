@@ -1,5 +1,6 @@
 package br.com.cajumobile.delivery.controller;
 
+import br.com.cajumobile.delivery.model.EstabelecimentoFormaPagamento;
 import br.com.cajumobile.delivery.model.FormaPagamento;
 import br.com.cajumobile.delivery.service.FormaPagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,16 @@ public class FormaPagamentoController {
     }
 
     @PostMapping
-    public ResponseEntity<FormaPagamento> salvarFormaPagamento(@RequestBody FormaPagamento formaPagamento){
+    public ResponseEntity<FormaPagamento> salvarFormaPagamento(@RequestBody FormaPagamento formaPagamento) {
         return ResponseEntity.ok(formaPagamentoService.salvar(formaPagamento));
+    }
+
+    @PostMapping("estabelecimento/{idEstabelecimento}")
+    public ResponseEntity<List<EstabelecimentoFormaPagamento>> salvarFormaPagamentoPorEstabelecimento(
+            @RequestBody List<FormaPagamento> formaPagamentos,
+            @PathVariable("idEstabelecimento") Integer idEstabelecimento
+    ) {
+        formaPagamentoService.salvarPorEstabelecimento(formaPagamentos, idEstabelecimento);
+        return ResponseEntity.ok().build();
     }
 }

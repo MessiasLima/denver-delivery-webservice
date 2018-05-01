@@ -28,8 +28,16 @@ public class GenericRepository<T> {
         entityManager.persist(entity);
     }
 
+    public void save(List<T> entityList) {
+        entityList.forEach(this::save);
+    }
+
     public T saveOrUpdate(T entity) {
         return entityManager.merge(entity);
+    }
+
+    public void saveOrUpdateList(List<T> entityList) {
+        entityList.forEach(this::saveOrUpdate);
     }
 
     public void delete(T entity) {
@@ -44,7 +52,7 @@ public class GenericRepository<T> {
         return entity;
     }
 
-    public List<T> findAll() throws EntityNotFoundException{
+    public List<T> findAll() throws EntityNotFoundException {
         CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
         CriteriaQuery<T> cq = builder.createQuery(clazz);
         Root<T> root = cq.from(clazz);

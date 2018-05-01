@@ -2,7 +2,8 @@ package br.com.cajumobile.delivery.service;
 
 import br.com.cajumobile.delivery.model.EstabelecimentoFormaPagamento;
 import br.com.cajumobile.delivery.model.FormaPagamento;
-import br.com.cajumobile.delivery.repository.FormaPagamentoRespository;
+import br.com.cajumobile.delivery.repository.EstabelecimentoFormaPagamentoRepository;
+import br.com.cajumobile.delivery.repository.FormaPagamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,11 @@ import java.util.List;
 public class FormaPagamentoService {
 
     @Autowired
-    private FormaPagamentoRespository formaPagamentoRespository;
+    private FormaPagamentoRepository formaPagamentoRespository;
+
+
+    @Autowired
+    private EstabelecimentoFormaPagamentoRepository estabelecimentoFormaPagamentoRepository;
 
     public List<FormaPagamento> listarTodos() {
         return formaPagamentoRespository.findAll();
@@ -35,4 +40,18 @@ public class FormaPagamentoService {
     public FormaPagamento salvar(FormaPagamento formaPagamento) {
         return formaPagamentoRespository.save(formaPagamento);
     }
+
+    @Transactional
+    public void salvarPorEstabelecimento(List<FormaPagamento> formaPagamentos, Integer idEstabelecimento) {
+        estabelecimentoFormaPagamentoRepository.saveOrUpdateList(montarEstabelecimentosFormaPagamento(formaPagamentos, idEstabelecimento));
+    }
+
+    private List<EstabelecimentoFormaPagamento> montarEstabelecimentosFormaPagamento(List<FormaPagamento> formaPagamentos, Integer idEstabelecimento) {
+        List<EstabelecimentoFormaPagamento> estabelecimentoFormaPagamentos = new ArrayList<>();
+        formaPagamentos.forEach(formaPagamento -> {
+            estabelecimentoFormaPagamentos.add(new EstabelecimentoFormaPagamento(formaPagamento.getId(), idEstabelecimento));
+        });
+        return estabelecimentoFormaPagamentos;
+    }
+
 }
