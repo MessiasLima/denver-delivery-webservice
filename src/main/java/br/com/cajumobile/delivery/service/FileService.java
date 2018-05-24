@@ -44,7 +44,7 @@ public class FileService {
         return new FileInputStream(file);
     }
 
-    private String getExtension(String fileName) {
+    public String getExtension(String fileName) {
         String[] split = fileName.split("\\.");
         return split[split.length - 1];
     }
