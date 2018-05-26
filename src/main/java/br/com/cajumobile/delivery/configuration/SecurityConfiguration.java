@@ -21,7 +21,16 @@ public class SecurityConfiguration extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(getAuthenticationInterceptor())
                 .addPathPatterns("/**/*")
-                .excludePathPatterns("/usuario/login", "/error", "/download/**/*");
+                .excludePathPatterns(getExcludePathPatterns());
+    }
+
+    private String[] getExcludePathPatterns() {
+        return new String[]{
+                "/usuario/login",
+                "/error",
+                "/download/**/*",
+                "/cliente"
+        };
     }
 
     @Override
@@ -29,6 +38,7 @@ public class SecurityConfiguration extends WebMvcConfigurerAdapter {
         registry.addMapping("/**/*")
                 .allowedMethods("GET", "POST", "OPTIONS", "PUT", "DELETE")
                 .allowedHeaders(
+                        "Tipo",
                         "Authorization",
                         "Content-Type",
                         "X-Requested-With",
