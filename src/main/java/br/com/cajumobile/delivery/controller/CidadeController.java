@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cidade")
+@SuppressWarnings("unused")
 public class CidadeController {
 
     @Autowired
