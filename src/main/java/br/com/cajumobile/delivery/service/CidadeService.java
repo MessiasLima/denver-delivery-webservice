@@ -26,24 +26,24 @@ public class CidadeService {
         Cidade cidade = new Cidade();
         cidade.setNome(nomeCidade);
 
-        return cidadeRepository.saveOrUpdate(cidade);
+        return cidadeRepository.save(cidade);
     }
 
     public List<Cidade> listCidades() {
-        return cidadeRepository.listCidades();
+        return cidadeRepository.findAll();
     }
 
     @Transactional
     public Cidade updateCidade(Cidade cidade) {
-        return cidadeRepository.saveOrUpdate(cidade);
+        return cidadeRepository.save(cidade);
     }
 
     @Transactional
     public void deleteCidade(Integer idCidade) {
-        cidadeRepository.deleteById(idCidade);
+        cidadeRepository.delete(idCidade);
     }
 
     public Cidade findById(Integer idCidade) {
-        return cidadeRepository.findById(idCidade);
+        return cidadeRepository.findOne(idCidade);
     }
 }
